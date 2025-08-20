@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef2f3; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        th { background: #4CAF50; color: white; }
+        form { margin: 0; }
+        select, button { padding: 5px; }
+        button { background: #2196F3; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #1976D2; }
+        .filter-box { background: white; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        .filter-box select, .filter-box button { margin: 5px; }
+        a { display: inline-block; margin-top: 15px; color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Gestión de Usuarios</h1>
+
+    <!-- FILTROS -->
+    <div class="filter-box">
+        <form method="GET">
+            <label for="rol">Filtrar por Rol:</label>
+            <select name="rol">
+                <option value="">Todos</option>
+                {% for rol in roles %}
+                    <option value="{{ rol }}" {% if request.args.get('rol') == rol %}selected{% endif %}>{{ rol }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="activo">Estado:</label>
+            <select name="activo">
+                <option value="">Todos</option>
+                <option value="1" {% if request.args.get('activo') == "1" %}selected{% endif %}>Activo</option>
+                <option value="0" {% if request.args.get('activo') == "0" %}selected{% endif %}>Inactivo</option>
+            </select>
+
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <!-- TABLA DE USUARIOS -->
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Historial de Roles</th>
+            <th>Acción</th>
+        </tr>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.correo }}</td>
+            <td>{{ usuario.rol }}</td>
+            <td>{{ "Activo" if usuario.activo else "Inactivo" }}</td>
+            <td>
+                <ul style="list-style: none; padding: 0;">
+                    {% for h in usuario.historial_roles %}
+                        <li>{{ h.rol }} - {{ h.fecha }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="id" value="{{ usuario._id }}">
+                    <select name="rol">
+                        {% for rol in roles %}
+                            <option value="{{ rol }}" {% if usuario.rol == rol %}selected{% endif %}>{{ rol }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="activo">
+                        <option value="1" {% if usuario.activo %}selected{% endif %}>Activo</option>
+                        <option value="0" {% if not usuario.activo %}selected{% endif %}>Inactivo</option>
+                    </select>
+                    <button type="submit">Actualizar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('registro') }}">➕ Registrar nuevo usuario</a>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #333; }
+        form { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input, select, button { width: 100%; padding: 8px; margin-top: 5px; }
+        button { background: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background: #45a049; }
+        a { display: block; margin-top: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Registro de Usuario</h1>
+    <form method="POST">
+        <label>Nombre</label>
+        <input type="text" name="nombre" required>
+
+        <label>Correo</label>
+        <input type="email" name="correo" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+
+        <label>Rol</label>
+        <select name="rol" required>
+            {% for rol in roles %}
+                <option value="{{ rol }}">{{ rol }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Registrar</button>
+    </form>
+    <a href="{{ url_for('gestionar') }}">Volver a gestión de usuarios</a>
+</body>
+</html>
