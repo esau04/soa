@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/producto.dart';
 import '../services/producto_service.dart';
 import 'producto_form_screen.dart';
+import 'ventas_screen.dart'; // 👈 importa la nueva pantalla
 
 class ProductosScreen extends StatefulWidget {
   @override
@@ -68,6 +69,18 @@ class _ProductosScreenState extends State<ProductosScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Farmacia - Productos'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.point_of_sale),
+            tooltip: "Ir a Ventas",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const VentasScreen()),
+              );
+            },
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(60),
           child: Padding(
@@ -91,10 +104,14 @@ class _ProductosScreenState extends State<ProductosScreen> {
         onRefresh: _refresh,
         child: _filteredProductos.isEmpty
             ? ListView(
-          children: [Center(child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text('No hay productos disponibles'),
-          ))],
+          children: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text('No hay productos disponibles'),
+              ),
+            )
+          ],
         )
             : ListView.builder(
           itemCount: _filteredProductos.length,
@@ -125,10 +142,12 @@ class _ProductosScreenState extends State<ProductosScreen> {
                                 '¿Estás seguro que deseas eliminar "${producto.nombre}"?'),
                             actions: [
                               TextButton(
-                                  onPressed: () => Navigator.pop(context, false),
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
                                   child: Text('Cancelar')),
                               TextButton(
-                                  onPressed: () => Navigator.pop(context, true),
+                                  onPressed: () =>
+                                      Navigator.pop(context, true),
                                   child: Text('Eliminar')),
                             ],
                           ),
