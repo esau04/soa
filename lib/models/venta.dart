@@ -8,6 +8,7 @@ class Venta {
   final String tipoVenta;
   final double descuento;
   final DateTime fecha;
+  String estado; // <- agregado
 
   Venta({
     required this.producto,
@@ -17,6 +18,7 @@ class Venta {
     required this.tipoVenta,
     required this.descuento,
     required this.fecha,
+    this.estado = 'Activo',
   });
 
   double get subtotal => producto.precioVenta * cantidad;
